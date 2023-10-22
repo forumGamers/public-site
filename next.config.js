@@ -4,6 +4,9 @@ const nextConfig = {
   experimental: {
     serverActions: true,
     appDocumentPreloading: true,
+    logging: {
+      fullUrl: true,
+    },
   },
   headers: async () => [
     {
