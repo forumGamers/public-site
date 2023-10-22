@@ -1,0 +1,107 @@
+#main-about {
+  display: flex;
+  flex-direction: column;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-top: 70px;
+  margin-bottom: 20px;
+}
+
+#logo-fg {
+  transform: translate(-100%, 25%);
+  opacity: 0;
+}
+.title-highlight {
+  background: radial-gradient(
+      75.3% 65106.57% at 1.06% -86.9%,
+      rgba(12, 80, 105, 0.2) 0%,
+      rgba(12, 74, 110, 0) 100%
+    ),
+    linear-gradient(89.96deg, #91dafc -0.07%, rgba(145, 218, 252, 0) 113.39%);
+  transform: rotate(-1.13deg);
+  opacity: 0;
+}
+
+@media (max-width: 640px) {
+  .title-highlight {
+    background: radial-gradient(
+        75.3% 65106.57% at 1.06% -86.9%,
+        rgba(12, 80, 105, 0.2) 0%,
+        rgba(12, 74, 110, 0) 100%
+      )
+      linear-gradient(89.96deg, #beebff -0.07%, rgba(145, 218, 252, 0) 113.39%);
+    transform: rotate(-1.13deg);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-header::before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: 0;
+    width: 20%;
+    height: 450%;
+    opacity: 40%;
+    background: radial-gradient(
+        78.47% 16.24% at 0% 39.21%,
+        rgba(221, 214, 254, 0.44) 0%,
+        rgba(217, 217, 217, 0) 100%
+      ),
+      radial-gradient(
+        77.5% 23.35% at -3.06% 47.79%,
+        rgba(14, 165, 233, 0.294) 0%,
+        rgba(217, 217, 217, 0) 100%
+      );
+    z-index: -1;
+  }
+}
+
+.header-title {
+  background: radial-gradient(
+      79.22% 146.6% at 80.79% 5.19%,
+      rgba(255, 255, 255, 0.3) 0%,
+      rgba(71, 85, 105, 0.3) 100%
+    ),
+    #075985;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 77px;
+  background: linear-gradient(to bottom, rgba(71, 85, 105, 0.9) 0%, #075985);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  color: unset;
+}
+
+#social-platform {
+  transform: translateX(100%);
+  opacity: 0;
+}
+.header-subtitle {
+  background: linear-gradient(
+    to right bottom,
+    rgb(41, 64, 73) 30%,
+    rgb(10, 15, 17)
+  );
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  color: unset;
+  background-clip: text;
+}
+
+.header-service {
+  padding: 1rem 0;
+  margin-bottom: 60px;
+  text-align: center;
+  margin-top: -8rem;
+}
+.header-service p {
+  font-size: 20px;
+  line-height: 28px;
+  text-align: center;
+}
