@@ -2,7 +2,7 @@
 
 import encryption from "@/utils/encryption";
 import { Mutate } from ".";
-import { GOOGLELOGIN, LOGIN } from "@/graphql/user";
+import { GOOGLELOGIN, LOGIN, USERRESETPASSWORD } from "@/graphql/user";
 import { redirect } from "next/navigation";
 import { RedirectType } from "next/dist/client/components/redirect";
 import { signIn } from "next-auth/react";
@@ -42,7 +42,7 @@ export async function loginHandler(formData: FormData) {
   }
 }
 
-export const googleLogin = async (response: CredentialResponse) => {
+export async function googleLogin(response: CredentialResponse) {
   try {
     const { data, errors } = await Mutate<{
       googleLogin: { access_token: string };
@@ -66,4 +66,27 @@ export const googleLogin = async (response: CredentialResponse) => {
   } catch (err) {
     redirect(`/auth/login?error=${err}`);
   }
-};
+}
+
+export async function forgetPassword(formData: FormData) {
+  try {
+    const email = encryption.encrypt(formData.get("email") as string);
+
+    const { data, errors } = await Mutate({
+      mutation: USERRESETPASSWORD,
+      variables: {
+        email,
+      },
+    });
+
+    if (!data && errors?.length)
+      redirect(
+        `/auth/forget-password?error=${errors[0].message}`,
+        RedirectType.push
+      );
+
+    redirect("/auth/login");
+  } catch (err) {
+    redirect(`/auth/login?error=${err}`);
+  }
+}

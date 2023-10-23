@@ -88,7 +88,7 @@ export default function LoginForm({ message }: { message: string }) {
           </label>
           {mount && (
             <ReCAPTCHA
-              sitekey="6LfV1KomAAAAACDWJoD_5v_IWsITa665j6NGMmXl"
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY as string}
               onChange={(token: string | null) => {
                 if (token)
                   setData((prev: state) => ({
