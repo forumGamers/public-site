@@ -2,12 +2,7 @@
 
 import encryption from "@/utils/encryption";
 import { Mutate } from ".";
-import {
-  GOOGLELOGIN,
-  LOGIN,
-  USERCHANGEFORGETPASS,
-  USERRESETPASSWORD,
-} from "@/graphql/user";
+import { GOOGLELOGIN, LOGIN, USERRESETPASSWORD } from "@/graphql/user";
 import { redirect } from "next/navigation";
 import { RedirectType } from "next/dist/client/components/redirect";
 import { signIn } from "next-auth/react";

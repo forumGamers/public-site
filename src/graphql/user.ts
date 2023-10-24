@@ -39,3 +39,11 @@ export const USERCHANGEFORGETPASS = gql`
     }
   }
 `;
+
+export const VERIFYUSER = gql`
+  mutation VerifyUser($token: tokenVerification!) {
+    verifyUser(token: $token) {
+      message
+    }
+  }
+`;
