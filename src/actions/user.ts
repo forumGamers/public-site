@@ -2,7 +2,12 @@
 
 import encryption from "@/utils/encryption";
 import { Mutate } from ".";
-import { GOOGLELOGIN, LOGIN, USERRESETPASSWORD } from "@/graphql/user";
+import {
+  GOOGLELOGIN,
+  LOGIN,
+  USERCHANGEFORGETPASS,
+  USERRESETPASSWORD,
+} from "@/graphql/user";
 import { redirect } from "next/navigation";
 import { RedirectType } from "next/dist/client/components/redirect";
 import { signIn } from "next-auth/react";
@@ -87,6 +92,6 @@ export async function forgetPassword(formData: FormData) {
 
     redirect("/auth/login");
   } catch (err) {
-    redirect(`/auth/login?error=${err}`);
+    redirect(`/auth/forget-password?error=${err}`);
   }
 }
