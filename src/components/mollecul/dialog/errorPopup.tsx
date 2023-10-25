@@ -2,7 +2,7 @@
 
 import type { Dispatch, SetStateAction } from "react";
 import PopUp from "@/components/atom/dialog/popup";
-import { Typography } from "@/components/mollecul/typography/typograph";
+import { Typography } from "@/components/atom/typography/typograph";
 import ErrorSvg from "@/components/images/errorSvg";
 import { Button } from "@/components/atom/button/material-tailwind";
 import {

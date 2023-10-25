@@ -2,7 +2,12 @@
 
 import encryption from "@/utils/encryption";
 import { Mutate } from ".";
-import { GOOGLELOGIN, LOGIN, USERRESETPASSWORD } from "@/graphql/user";
+import {
+  GOOGLELOGIN,
+  LOGIN,
+  REGISTER,
+  USERRESETPASSWORD,
+} from "@/graphql/user";
 import { redirect } from "next/navigation";
 import { RedirectType } from "next/dist/client/components/redirect";
 import { signIn } from "next-auth/react";
@@ -88,5 +93,33 @@ export async function forgetPassword(formData: FormData) {
     redirect("/auth/login");
   } catch (err) {
     redirect(`/auth/forget-password?error=${err}`);
+  }
+}
+
+export async function registerHandler(formData: FormData) {
+  try {
+    const email = encryption.encrypt(formData.get("email") as string);
+    const password = encryption.encrypt(formData.get("password") as string);
+    const fullname = encryption.encrypt(formData.get("fullname") as string);
+    const username = encryption.encrypt(formData.get("username") as string);
+
+    const { data, errors } = await Mutate({
+      mutation: REGISTER,
+      variables: {
+        register: {
+          email,
+          password,
+          fullname,
+          username,
+        },
+      },
+    });
+
+    if (!data && errors?.length)
+      redirect(`/auth/register?error=${errors[0].message}`, RedirectType.push);
+
+    redirect("/auth/login");
+  } catch (err) {
+    redirect(`/auth/register?error=${err}`);
   }
 }

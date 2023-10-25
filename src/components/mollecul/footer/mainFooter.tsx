@@ -1,5 +1,5 @@
 import { LazyLoadImage } from "@/components/images/lazy-load-image";
-import { Typography } from "@/components/mollecul/typography/typograph";
+import { Typography } from "@/components/atom/typography/typograph";
 import Link from "next/link";
 
 export default function MainFooter() {
