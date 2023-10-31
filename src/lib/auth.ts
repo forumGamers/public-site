@@ -2,6 +2,7 @@ import type { NextAuthOptions, Session, TokenSet, User } from "next-auth";
 import credentials from "next-auth/providers/credentials";
 import googleCredentials from "next-auth/providers/google";
 import type { JWT } from "next-auth/jwt";
+import jwt from "@/utils/jwt";
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -19,25 +20,15 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         try {
-          // const payload = verifyToken(credentials?.access_token) as any;
-
-          // const { id, email, username, imageUrl: image } = payload;
-
-          // const user = {
-          //   id,
-          //   name: username,
-          //   email,
-          //   access_token: credentials?.access_token,
-          //   image,
-          // };
+          const { UUID, loggedAs } = jwt.verifyToken(
+            credentials?.access_token || ""
+          );
 
           return {
-            access_token: "",
-            name: "",
-            email: "",
-            id: 1,
-            image: "",
-          } as any;
+            id: UUID,
+            name: loggedAs,
+            email: `${loggedAs}@mail.com`,
+          };
         } catch (err) {
           return null;
         }
@@ -49,16 +40,8 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   pages: {
-    signIn: "/login",
+    signIn: "/auth/login",
   },
-  //   jwt: {
-  //     decode({ secret, token }) {
-  //       return customVerify(token, secret) as JWT;
-  //     },
-  //     encode({ secret, token }) {
-  //       return customToken(token as JWT, secret);
-  //     },
-  //   },
   callbacks: {
     session({
       session,

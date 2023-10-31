@@ -2,12 +2,11 @@ import LoginNavbar from "@/components/mollecul/navbar/loginNav";
 import LoginForm from "./form";
 import GoogleLoginForm from "./googleLogin";
 import { loginHandler } from "@/actions/user";
+import { getServerSideSession } from "@/helpers/session";
+import { redirect } from "next/navigation";
 
-export default function Page({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
+export default async function Page() {
+  if (await getServerSideSession()) redirect("/");
   return (
     <>
       <LoginNavbar />
@@ -21,7 +20,7 @@ export default function Page({
               className="mb-4 flex justify-center items-center"
               action={loginHandler}
             >
-              <LoginForm message={(searchParams.error as string) || ""} />
+              <LoginForm />
             </form>
             <GoogleLoginForm />
           </div>

@@ -14,37 +14,34 @@ import { signIn } from "next-auth/react";
 import type { CredentialResponse } from "@react-oauth/google";
 
 export async function loginHandler(formData: FormData) {
-  try {
-    const email = encryption.encrypt(formData.get("email") as string);
-    const password = encryption.encrypt(formData.get("password") as string);
-    const tokenCaptcha = formData.get("g-recaptcha-response");
+  const email = encryption.encrypt(formData.get("email") as string);
+  const password = encryption.encrypt(formData.get("password") as string);
+  const tokenCaptcha = formData.get("g-recaptcha-response");
 
-    const { data, errors } = await Mutate<{
-      login: { access_token: string };
-    }>({
-      mutation: LOGIN,
-      variables: {
-        login: {
-          email,
-          password,
-        },
+  const { data, errors } = await Mutate<{
+    login: { access_token: string };
+  }>({
+    mutation: LOGIN,
+    variables: {
+      login: {
+        email,
+        password,
       },
-      context: {
-        headers: {
-          access_token: tokenCaptcha,
-        },
+    },
+    context: {
+      headers: {
+        access_token: tokenCaptcha,
       },
-    });
+    },
+  });
 
-    if (!data && errors?.length)
-      redirect(`/auth/login?error=${errors[0].message}`, RedirectType.push);
+  if (!data && errors?.length)
+    redirect(`/auth/login?error=${errors[0].message}`, RedirectType.push);
 
-    await signIn("credentials", { access_token: data?.login.access_token });
-
-    redirect("/", RedirectType.replace);
-  } catch (err) {
-    redirect(`/auth/login?error=${err}`);
-  }
+  redirect(
+    `/auth/login?token=${data?.login.access_token}`,
+    RedirectType.replace
+  );
 }
 
 export async function googleLogin(response: CredentialResponse) {

@@ -7,6 +7,8 @@ import { Button } from "@/components/atom/button/material-tailwind";
 import ErrorAlert from "@/components/mollecul/dialog/errorPopup";
 import { experimental_useFormStatus as useFormStatus } from "react-dom";
 import LoadingOverlay from "@/components/loader/overlay";
+import { signIn } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export type state = {
   email: string;
@@ -15,8 +17,12 @@ export type state = {
   tokenCaptcha: string;
 };
 
-export default function LoginForm({ message }: { message: string }) {
+export default function LoginForm() {
   const { pending } = useFormStatus();
+  const searchParams = new URLSearchParams(useSearchParams()!);
+  const token = searchParams.get("token");
+  const msg = searchParams.get("error");
+  const router = useRouter();
   const [mount, setMount] = useState<boolean>(false);
   const [data, setData] = useState<state>({
     email: "",
@@ -28,15 +34,26 @@ export default function LoginForm({ message }: { message: string }) {
   const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
+    window.history.replaceState({}, "", window.location.pathname);
     setMount(true);
   }, []);
 
   useEffect(() => {
-    if (message) {
+    if (token) {
+      (async () => {
+        await signIn("credentials", { access_token: token, redirect: false });
+        window.history.replaceState({}, "", window.location.pathname);
+        router.replace("/");
+      })();
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (msg) {
       setOpen(true);
       window.history.replaceState({}, "", window.location.pathname);
     }
-  }, [message]);
+  }, [msg]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -122,7 +139,7 @@ export default function LoginForm({ message }: { message: string }) {
       </LoadingOverlay>
       <ErrorAlert
         name="Error"
-        message={message}
+        message={msg || "internal server error"}
         handler={setOpen}
         open={open}
       />
