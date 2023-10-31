@@ -18,6 +18,6 @@ export const Query = async <T = any>(
 ): Promise<ApolloQueryResult<T>> =>
   await client.query<T>({
     ...queryObj,
-    fetchPolicy: "cache-first",
+    fetchPolicy: "no-cache",
     errorPolicy: "all",
   });
