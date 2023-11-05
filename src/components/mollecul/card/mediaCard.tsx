@@ -1,24 +1,18 @@
 "use client";
 
 import { Typography } from "@/components/atom/typography/typograph";
+import type { PostMedia } from "@/interfaces/post";
 
 export type PostMediaProps = {
-  type?: "image" | "video";
-  url?: string;
   text: string;
+  media?: PostMedia;
   muted?: boolean;
 };
 
-export default function PostMedia({
-  type,
-  url,
-  text,
-  muted = false,
-}: PostMediaProps) {
-  return (
-    <>
-      <Typography variant="h6">{text}</Typography>
-      {!!url && type === "image" ? (
+function HandleMedia(type: "image" | "video", url: string, muted = false) {
+  switch (type) {
+    case "image":
+      return (
         <figure>
           <img
             className="h-96 w-full rounded-lg object-cover object-center"
@@ -26,7 +20,9 @@ export default function PostMedia({
             alt="post image"
           />
         </figure>
-      ) : (
+      );
+    case "video":
+      return (
         <video
           className="h-full w-full rounded-lg"
           controls
@@ -36,7 +32,19 @@ export default function PostMedia({
           <source src={url} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-      )}
+      );
+  }
+}
+
+export default function PostMedia({
+  text,
+  muted = false,
+  media,
+}: PostMediaProps) {
+  return (
+    <>
+      <Typography variant="h6">{text}</Typography>
+      {media && HandleMedia(media.type, media.url, muted)}
     </>
   );
 }

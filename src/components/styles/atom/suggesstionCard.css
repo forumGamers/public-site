@@ -1,0 +1,15 @@
+#button-proggres {
+  background: linear-gradient(to right, blue 50%, white 50%);
+  background-size: 200% 100%;
+  background-position: right bottom;
+  color: blue;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 1s ease-out;
+}
+
+#button-proggres:hover {
+  background-position: left bottom;
+  color: blue;
+}

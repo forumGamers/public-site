@@ -1,12 +1,11 @@
 "use client";
 
-import AvatarProfile from "@/components/mollecul/avatar/profile";
+import AvatarProfile, {type AvatarProfileProps} from "@/components/mollecul/avatar/profile";
 import { EllipsisVerticalIcon } from "@/components/icons/heroIconsOutline";
 import { Button } from "@/components/atom/button/material-tailwind";
 import { CardHeader } from "@/components/atom/card/material-tailwind";
-import type { UserProfile } from "@/interfaces/user";
 
-export default function PostHeader({ user }: { user: UserProfile }) {
+export default function PostHeader({ user }: { user: AvatarProfileProps }) {
   return (
     <CardHeader
       color="transparent"

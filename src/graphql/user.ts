@@ -47,3 +47,53 @@ export const VERIFYUSER = gql`
     }
   }
 `;
+
+export const ME = gql`
+  query GetUserByToken {
+    getUserByToken {
+      background_id
+      background_url
+      bio
+      created_at
+      division
+      email
+      followers
+      following
+      fullname
+      id
+      image_id
+      image_url
+      is_verified
+      role
+      status
+      token_as
+      updated_at
+      username
+    }
+  }
+`;
+
+export const FOLLOWINGRECOMMENDATION = gql`
+  query GetFollowingRecomendation {
+    getFollowingRecomendation {
+      background_id
+      background_url
+      bio
+      division
+      created_at
+      email
+      followers
+      following
+      fullname
+      id
+      image_id
+      image_url
+      is_verified
+      role
+      status
+      token_as
+      updated_at
+      username
+    }
+  }
+`;

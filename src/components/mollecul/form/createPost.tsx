@@ -10,12 +10,14 @@ import {
   CalendarDaysIcon,
 } from "@/components/icons/heroIconsSolid";
 import { Button } from "@/components/atom/button/material-tailwind";
+import type { UserData } from "@/interfaces/user";
+import { defaultImgProfile } from "@/constants";
 
-export default function CreatePostCard({
-  imageUrl = "/global/guest.svg",
-}: {
-  imageUrl?: string;
-}) {
+export interface CreatePostCardProps {
+  user: UserData;
+}
+
+export default function CreatePostCard({ user }: CreatePostCardProps) {
   return (
     <Card
       color="transparent"
@@ -32,7 +34,7 @@ export default function CreatePostCard({
           variant="circular"
           alt="profile-picture"
           className="cursor-pointer"
-          src={imageUrl}
+          src={user.image_url || defaultImgProfile}
         />
         <div className="flex w-full">
           <Button className="btn btn-ghost flex justify-start gap-1 text-white/50 border border-white/50 rounded-2xl w-full bg-transparent">

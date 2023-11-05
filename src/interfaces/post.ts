@@ -10,14 +10,24 @@ export interface TimeLine {
   imageUrl: string;
   imageId: string;
   allowComment: boolean;
-  createdAt: string;
-  updatedAt: string;
-  countLike: number;
-  countComment: number;
-  countShare: number;
+  CreatedAt: string;
+  UpdatedAt: string;
+  CountLike: number;
+  CountComment: number;
+  CountShare: number;
   searchAfterTimeStamp: number;
   searchAfterId: string;
   User: UserTimeLine;
+  Media: PostMedia;
+  isLiked: boolean;
+  isShared: boolean;
+  tags: string[];
+}
+
+export interface PostMedia {
+  id: string;
+  type: "image" | "video";
+  url: string;
 }
 
 export interface UserTimeLine {

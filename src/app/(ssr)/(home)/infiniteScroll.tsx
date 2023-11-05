@@ -1,65 +1,62 @@
 "use client";
 
-import { useState, useEffect, useTransition } from "react";
+import { useState, useEffect, useTransition, useRef } from "react";
 import { Spinner } from "@/components/loader/material-tailwind";
 import PostCard from "@/components/organ/card/postCard";
 import type { PostDataParams, TimeLine } from "@/interfaces/post";
 
-export default function InfinityScroll({
-  handler,
-}: {
+export interface InfinityScrollProps {
   handler: (params: PostDataParams) => Promise<TimeLine[]>;
-}) {
+  initialState: TimeLine[];
+}
+
+export default function InfinityScroll({
+  initialState,
+  handler,
+}: InfinityScrollProps) {
   const [isPending, startTransition] = useTransition();
-  const [data, setData] = useState<TimeLine[]>([]);
+  const [data, setData] = useState<TimeLine[]>(initialState);
   const [loading, setLoading] = useState<boolean>(false);
-  const [page, setPage] = useState<[number, string]>([0, ""]);
-  const scrollSection =
-    typeof document !== "undefined"
-      ? (document.getElementById("scroll-section") as HTMLElement)
-      : null;
-
-  const fetchData = (params: PostDataParams) => {
-    startTransition(async () => {
-      setLoading(true);
-      const posts = await handler(params);
-      setData((prev) => [...prev, ...posts]);
-      setPage(() => {
-        const last = posts[posts.length - 1];
-        return [last.searchAfterTimeStamp, last.searchAfterId];
-      });
-      setLoading(false);
-    });
-  };
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetchData({});
-  }, []);
+    const observer = new IntersectionObserver(
+      async (entities) => {
+        if (entities[0].isIntersecting) {
+          startTransition(async () => {
+            setLoading(true);
+            const last = data[data.length - 1];
+            const posts = await handler({
+              page: `${last.searchAfterTimeStamp},${last.searchAfterId}`,
+            });
+            if (posts.length) {
+              setData((prev) => [...prev, ...posts]);
+            }
+            setLoading(false);
+          });
+        }
+      },
+      {
+        root: null,
+        rootMargin: "20px",
+        threshold: 1.0,
+      }
+    );
+    if (ref.current) observer.observe(ref.current);
 
-  const handleScroll = () => {
-    if (
-      (scrollSection as HTMLElement).getBoundingClientRect().bottom <=
-      window.innerHeight
-    )
-      fetchData({});
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+    return () => observer.disconnect();
+  }, [data]);
 
   return (
     <>
       <article id="scroll-section" className="border border-white">
         {data.map((el: TimeLine) => (
-          <PostCard key={el._id} />
+          <PostCard key={el._id} post={el} />
         ))}
       </article>
-      {(loading || isPending) && <Spinner className="h-4 w-4" color="blue" />}
+      <div ref={ref}>
+        {(loading || isPending) && <Spinner className="h-4 w-4" color="blue" />}
+      </div>
     </>
   );
 }

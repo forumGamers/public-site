@@ -28,6 +28,7 @@ export const authOptions: NextAuthOptions = {
             id: UUID,
             name: loggedAs,
             email: `${loggedAs}@mail.com`,
+            access_token: credentials?.access_token,
           };
         } catch (err) {
           return null;

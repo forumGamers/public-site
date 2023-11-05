@@ -1,0 +1,8 @@
+#suggestion::-webkit-scrollbar {
+  display: none;
+}
+
+#suggestion {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

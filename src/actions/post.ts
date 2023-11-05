@@ -7,6 +7,7 @@ import { getServerSideSession } from "@/helpers/session";
 
 export const getTimeLine = async (query: PostDataParams) => {
   try {
+    const access_token = (await getServerSideSession())?.user?.access_token;
     const { data, errors } = await Query<{ getTimeLine: TimeLine[] }>({
       query: GETTIMELINE,
       variables: {
@@ -14,11 +15,10 @@ export const getTimeLine = async (query: PostDataParams) => {
       },
       context: {
         headers: {
-          access_token: await getServerSideSession(),
+          access_token,
         },
       },
     });
-
     return !data && errors?.length ? [] : data.getTimeLine;
   } catch (err) {
     return [];

@@ -1,17 +1,20 @@
 "use server";
 
 import encryption from "@/utils/encryption";
-import { Mutate } from ".";
+import { Mutate, Query } from ".";
 import {
+  FOLLOWINGRECOMMENDATION,
   GOOGLELOGIN,
   LOGIN,
+  ME,
   REGISTER,
   USERRESETPASSWORD,
 } from "@/graphql/user";
 import { redirect } from "next/navigation";
 import { RedirectType } from "next/dist/client/components/redirect";
-import { signIn } from "next-auth/react";
 import type { CredentialResponse } from "@react-oauth/google";
+import { getServerSideSession } from "@/helpers/session";
+import type { UserData } from "@/interfaces/user";
 
 export async function loginHandler(formData: FormData) {
   const email = encryption.encrypt(formData.get("email") as string);
@@ -31,6 +34,7 @@ export async function loginHandler(formData: FormData) {
     context: {
       headers: {
         access_token: tokenCaptcha,
+        v: true,
       },
     },
   });
@@ -60,11 +64,10 @@ export async function googleLogin(response: CredentialResponse) {
     if (!data && errors?.length)
       redirect(`/auth/login?error=${errors[0].message}`, RedirectType.push);
 
-    await signIn("credentials", {
-      access_token: data?.googleLogin.access_token,
-    });
-
-    redirect("/", RedirectType.replace);
+    redirect(
+      `/auth/login?token=${data?.googleLogin.access_token}`,
+      RedirectType.replace
+    );
   } catch (err) {
     redirect(`/auth/login?error=${err}`);
   }
@@ -78,6 +81,11 @@ export async function forgetPassword(formData: FormData) {
       mutation: USERRESETPASSWORD,
       variables: {
         email,
+      },
+      context: {
+        headers: {
+          v: true,
+        },
       },
     });
 
@@ -119,4 +127,32 @@ export async function registerHandler(formData: FormData) {
   } catch (err) {
     redirect(`/auth/register?error=${err}`);
   }
+}
+
+export async function me() {
+  const { data, errors } = await Query<{ getUserByToken: UserData }>({
+    query: ME,
+    context: {
+      headers: {
+        access_token: (await getServerSideSession())?.user?.access_token,
+      },
+    },
+  });
+
+  return !data && errors?.length ? null : data.getUserByToken;
+}
+
+export async function followingRecomendation() {
+  const { data, errors } = await Query<{
+    getFollowingRecomendation: UserData[];
+  }>({
+    query: FOLLOWINGRECOMMENDATION,
+    context: {
+      headers: {
+        access_token: (await getServerSideSession())?.user?.access_token,
+      },
+    },
+  });
+
+  return !data && errors?.length ? [] : data.getFollowingRecomendation;
 }
