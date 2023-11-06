@@ -19,3 +19,7 @@ export interface HeaderProps {
   desc?: string;
   font?: string;
 }
+
+export interface MessageResponse {
+  message: string;
+}

@@ -35,3 +35,19 @@ export const GETTIMELINE = gql`
     }
   }
 `;
+
+export const LIKEAPOST = gql`
+  mutation Mutation($likeAPostId: String!) {
+    likeAPost(id: $likeAPostId) {
+      message
+    }
+  }
+`;
+
+export const UNLIKEAPOST = gql`
+  mutation Mutation($unLikeAPostId: String!) {
+    unLikeAPost(id: $unLikeAPostId) {
+      message
+    }
+  }
+`;

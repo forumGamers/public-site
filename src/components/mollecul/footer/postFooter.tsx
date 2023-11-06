@@ -9,16 +9,38 @@ import {
 } from "@/components/icons/heroIconsOutline";
 import Link from "next/link";
 import { Button } from "@/components/atom/button/material-tailwind";
+import type { TimeLine } from "@/interfaces/post";
+import { LikeAPost, UnLikeAPost } from "@/actions/post";
 
 export type PostFooterProps = {
   liked?: boolean;
   _id: string;
+  mutation: (action: TimeLine) => void;
 };
 
-export default function PostFooter({ liked = false, _id }: PostFooterProps) {
+export default function PostFooter({
+  liked = false,
+  _id,
+  mutation,
+}: PostFooterProps) {
+  const LikeHandler = () => {
+    mutation({ isLiked: !liked } as TimeLine);
+
+    liked
+      ? UnLikeAPost(_id).then((data) => {
+          if (!data) mutation({ isLiked: liked } as TimeLine);
+        })
+      : LikeAPost(_id).then((data) => {
+          if (!data) mutation({ isLiked: liked } as TimeLine);
+        });
+  };
+
   return (
     <CardFooter className="flex flex-row justify-between p-0">
-      <Button className="bg-transparent btn btn-ghost gap-1 text-base">
+      <Button
+        className="bg-transparent btn btn-ghost gap-1 text-base"
+        onClick={LikeHandler}
+      >
         <HeartIcon
           className={`h-6 w-6 text-[#EE2924]
              ${liked ? "text-[#EE2924]" : "text-transparent stroke-[#EE2924]"}

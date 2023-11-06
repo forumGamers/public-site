@@ -1,5 +1,3 @@
-"use client";
-
 import { Typography } from "@/components/atom/typography/typograph";
 
 export type PostInsightProps = {
