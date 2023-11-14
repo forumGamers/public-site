@@ -1,5 +1,5 @@
 "use client";
 
-import { Input, Checkbox, Select } from "@material-tailwind/react";
+import { Input, Checkbox, Select, Textarea } from "@material-tailwind/react";
 
-export { Input, Checkbox, Select };
+export { Input, Checkbox, Select, Textarea };

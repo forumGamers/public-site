@@ -50,8 +50,8 @@ export default function PostFooter({
       </Button>
 
       <Link
-        className="btn btn-ghost gap-1 text-white/50"
-        href={`/comments/${_id}`}
+        className="btn btn-ghost gap-1 text-white/50 cursor-pointer"
+        href={`/comment/${_id}`}
       >
         <ChatBubbleLeftIcon className="h-6 w-6 text-[#EE2924]" />
         <span style={{ textTransform: "none" }}>Comment</span>

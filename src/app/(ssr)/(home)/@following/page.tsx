@@ -11,7 +11,7 @@ export default async function Page() {
       style={{ scrollbarWidth: "none" }}
       id="suggestion"
     >
-      {data.length &&
+      {!!data.length &&
         data.map((el) => (
           <SuggestionCard
             image_url={el.image_url}

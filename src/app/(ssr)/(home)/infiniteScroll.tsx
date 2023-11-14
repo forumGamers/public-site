@@ -16,25 +16,23 @@ export default function InfinityScroll({
 }: InfinityScrollProps) {
   const [isPending, startTransition] = useTransition();
   const [data, setData] = useState<TimeLine[]>(initialState);
-  const [loading, setLoading] = useState<boolean>(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      async (entities) => {
-        if (entities[0].isIntersecting) {
+      (entities) => {
+        if (entities[0].isIntersecting)
           startTransition(async () => {
-            setLoading(true);
-            const last = data[data.length - 1];
-            const posts = await handler({
-              page: `${last.searchAfterTimeStamp},${last.searchAfterId}`,
-            });
-            if (posts.length) {
-              setData((prev) => [...prev, ...posts]);
+            if (data.length) {
+              const { searchAfterId, searchAfterTimeStamp } = data[
+                data.length - 1
+              ];
+              const posts = await handler({
+                page: `${searchAfterTimeStamp},${searchAfterId}`,
+              });
+              if (posts.length) setData((prev) => [...prev, ...posts]);
             }
-            setLoading(false);
           });
-        }
       },
       {
         root: null,
@@ -55,7 +53,7 @@ export default function InfinityScroll({
         ))}
       </article>
       <div ref={ref}>
-        {(loading || isPending) && <Spinner className="h-4 w-4" color="blue" />}
+        {isPending && <Spinner className="h-4 w-4" color="blue" />}
       </div>
     </>
   );

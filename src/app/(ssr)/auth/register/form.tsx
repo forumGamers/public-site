@@ -37,7 +37,6 @@ export default function Form() {
           Your Name
         </Typography>
         <Input
-          crossOrigin
           size="lg"
           onChange={onChange}
           placeholder="name@mail.com"
@@ -51,7 +50,6 @@ export default function Form() {
           Your Username
         </Typography>
         <Input
-          crossOrigin
           size="lg"
           onChange={onChange}
           placeholder="name@mail.com"
@@ -65,7 +63,6 @@ export default function Form() {
           Your Email
         </Typography>
         <Input
-          crossOrigin
           size="lg"
           onChange={onChange}
           value={data.email}
@@ -79,7 +76,6 @@ export default function Form() {
           Password
         </Typography>
         <Input
-          crossOrigin
           value={data.password}
           type="password"
           size="lg"
@@ -92,7 +88,6 @@ export default function Form() {
         />
       </div>
       <Checkbox
-        crossOrigin
         label={
           <Typography
             variant="small"

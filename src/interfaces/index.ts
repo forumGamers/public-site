@@ -23,3 +23,7 @@ export interface HeaderProps {
 export interface MessageResponse {
   message: string;
 }
+
+export interface PageParams<T = { id: string }> {
+  params: T;
+}

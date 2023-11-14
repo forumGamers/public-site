@@ -39,3 +39,26 @@ export interface UserTimeLine {
   isfollowed: boolean;
   backgroundImage: string;
 }
+
+export interface Comment {
+  _id: string;
+  userId: string;
+  text: string;
+  postId: string;
+  CreatedAt: Date;
+  UpdatedAt: Date;
+  Reply: Reply[];
+  User: UserTimeLine;
+  searchAfterTimeStamp: number;
+  searchAfterId: string;
+}
+
+export interface Reply {
+  _id: string;
+  userId: string;
+  text: string;
+  CommentId: string;
+  CreatedAt: Date;
+  UpdatedAt: Date;
+  User: UserTimeLine;
+}
