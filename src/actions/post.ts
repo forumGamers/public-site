@@ -1,17 +1,25 @@
 "use server";
 
-import type { Comment, PostDataParams, TimeLine } from "@/interfaces/post";
+import type {
+  Comment,
+  CommentResult,
+  PostDataParams,
+  TimeLine,
+} from "@/interfaces/post";
 import { Mutate, Query } from ".";
 import {
   COMMENTAPOST,
   GETPOSTCOMMENT,
   GETTIMELINE,
   LIKEAPOST,
+  REPLYCOMMENT,
   UNLIKEAPOST,
 } from "@/graphql/post";
 import { getServerSideSession } from "@/helpers/session";
 import encryption from "@/utils/encryption";
 import type { MessageResponse } from "@/interfaces";
+import { me } from "./user";
+import type { UserData } from "@/interfaces/user";
 
 export const getTimeLine = async (query: PostDataParams) => {
   try {
@@ -101,26 +109,71 @@ export const getPostComment = async (
   }
 };
 
-export const commentPost = async (text: string, postId: string) => {
+export const commentPost = async (
+  text: string,
+  postId: string
+): Promise<CommentResult> => {
   try {
-    const { data, errors } = await Mutate<{ id: string }>({
-      mutation: COMMENTAPOST,
-      context: {
-        headers: {
-          access_token: (await getServerSideSession())?.user?.access_token,
-          v: true,
+    const [{ data, errors }, user] = await Promise.all([
+      await Mutate<{ id: string }>({
+        mutation: COMMENTAPOST,
+        context: {
+          headers: {
+            access_token: (await getServerSideSession())?.user?.access_token,
+            v: true,
+          },
         },
-      },
-      variables: {
-        text: encryption.encrypt(text),
-        postId: encryption.encrypt(postId),
-      },
-    });
+        variables: {
+          text: encryption.encrypt(text),
+          postId: encryption.encrypt(postId),
+        },
+      }),
+      me(),
+    ]);
 
     if (!data && errors?.length)
       return { success: false, message: errors[0].message, data: null };
 
-    return { success: true, data, message: "OK" };
+    return {
+      success: true,
+      data: { id: (data as { id: string }).id, user: user as UserData },
+      message: "OK",
+    };
+  } catch (err) {
+    return { success: false, data: null, message: "Internal Server Error" };
+  }
+};
+
+export const ReplyComment = async (
+  text: string,
+  commentId: string
+): Promise<CommentResult> => {
+  try {
+    const [{ data, errors }, user] = await Promise.all([
+      Mutate<{ id: string }>({
+        mutation: REPLYCOMMENT,
+        context: {
+          headers: {
+            access_token: (await getServerSideSession())?.user?.access_token,
+            v: true,
+          },
+        },
+        variables: {
+          text: encryption.encrypt(text),
+          commentId: encryption.encrypt(commentId),
+        },
+      }),
+      me(),
+    ]);
+
+    if (!data && errors?.length)
+      return { success: false, message: errors[0].message, data: null };
+
+    return {
+      success: true,
+      data: { id: (data as { id: string }).id, user: user as UserData },
+      message: "OK",
+    };
   } catch (err) {
     return { success: false, data: null, message: "Internal Server Error" };
   }

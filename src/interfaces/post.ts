@@ -1,3 +1,5 @@
+import type { UserData } from "./user";
+
 export interface PostDataParams {
   page?: string;
   limit?: string;
@@ -61,4 +63,10 @@ export interface Reply {
   CreatedAt: Date;
   UpdatedAt: Date;
   User: UserTimeLine;
+}
+
+export interface CommentResult {
+  success: boolean;
+  message: string;
+  data?: { id: string; user: UserData } | null;
 }

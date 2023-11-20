@@ -46,6 +46,7 @@ export default function CommentSection({ comments }: CommentSectionProps) {
     setText(e.target.value);
   };
   const { id } = useParams() as Record<"id", string>;
+
   const actionHandler = async (formData: FormData) => {
     const [formName] = Array.from<string>(formData.keys());
     const [_, postId] = formName.split("-");
@@ -56,10 +57,34 @@ export default function CommentSection({ comments }: CommentSectionProps) {
 
     commentPost(text, postId).then(({ data, success }) => {
       if (!success)
-        setCommentDatas({ type: "error", data: { text } as Comment });
+        return setCommentDatas({ type: "error", data: { text } as Comment });
 
-      setCommentState([{} as Comment, ...commentState]);
+      const now = new Date();
+      setCommentState([
+        {
+          _id: data?.id ?? "",
+          userId: data?.user.id ?? "",
+          text,
+          postId,
+          CreatedAt: now,
+          UpdatedAt: now,
+          User: {
+            id: data?.user.id ?? "",
+            imageUrl: data?.user.image_url ?? "",
+            UUID: data?.user.id ?? "",
+            username: data?.user.username ?? "",
+            bio: data?.user.bio ?? "",
+            isfollowed: false,
+            backgroundImage: data?.user.background_url ?? "",
+          },
+          searchAfterId: data?.id ?? "",
+          searchAfterTimeStamp: now.getTime(),
+          Reply: [],
+        },
+        ...commentState,
+      ]);
     });
+    setText("");
   };
 
   useEffect(() => {
@@ -93,7 +118,13 @@ export default function CommentSection({ comments }: CommentSectionProps) {
   return (
     <>
       {!!commentDatas.length &&
-        commentDatas.map((comment) => <CommentCard comment={comment} />)}
+        commentDatas.map((comment) => (
+          <CommentCard
+            setCommentState={setCommentState}
+            comment={comment}
+            setCommentOptimistic={setCommentDatas}
+          />
+        ))}
       <div ref={ref}>
         {isPending && <Spinner className="h-4 w-4" color="blue" />}
       </div>

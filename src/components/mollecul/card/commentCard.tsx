@@ -1,20 +1,26 @@
 "use client";
 
 import type { Comment } from "@/interfaces/post";
-import { useState, useRef } from "react";
+import { useState, useRef, type Dispatch, type SetStateAction } from "react";
 import LoadingOverlay from "@/components/loader/overlay";
 import AvatarProfile from "@/components/mollecul/avatar/profile";
 import { Typography } from "@/components/atom/typography/typograph";
-import { useParams } from "next/navigation";
 import { Button } from "@/components/atom/button/material-tailwind";
+import ReplyForm from "../collapse/replyForm";
+import type { NewComments } from "@/components/organ/card/commentCard";
 
 export interface CommentCardProps {
   comment: Comment & { type?: "error" | "loading" };
+  setCommentState: Dispatch<SetStateAction<Comment[]>>;
+  setCommentOptimistic: (action: NewComments) => void;
 }
 
-export default function CommentCard({ comment }: CommentCardProps) {
+export default function CommentCard({
+  comment,
+  setCommentState,
+  setCommentOptimistic,
+}: CommentCardProps) {
   const textRef = useRef<HTMLParagraphElement>(null);
-  const { id } = useParams() as Record<"id", string>;
   const [limit, setLimit] = useState<number>(0);
   const [collapse, setCollapse] = useState<boolean>(false);
 
@@ -23,8 +29,7 @@ export default function CommentCard({ comment }: CommentCardProps) {
       <LoadingOverlay
         spinner
         active={comment.type === "loading"}
-        className="flex flex-col"
-      >
+        className="flex flex-col">
         <div
           className={`flex items-start ${
             comment.type === "error"
@@ -32,14 +37,12 @@ export default function CommentCard({ comment }: CommentCardProps) {
               : comment.type === "loading"
               ? "border-2 border-blue-500"
               : ""
-          }`}
-        >
+          }`}>
           <AvatarProfile user={comment.User} />
         </div>
         <Typography
           className="font-normal cursor-pointer p-4 mb-4"
-          ref={textRef}
-        >
+          ref={textRef}>
           {comment.text}
         </Typography>
       </LoadingOverlay>
@@ -50,8 +53,7 @@ export default function CommentCard({ comment }: CommentCardProps) {
             variant="text"
             className="rounded-full"
             color="red"
-            type="submit"
-          >
+            type="submit">
             {limit < 3 ? "Resend ?" : "Limit Reached"}
           </Button>
         </form>
@@ -60,8 +62,7 @@ export default function CommentCard({ comment }: CommentCardProps) {
           variant="text"
           className="rounded-full"
           color="red"
-          onClick={() => setCollapse(!collapse)}
-        >
+          onClick={() => setCollapse(!collapse)}>
           Reply
         </Button>
       )}
@@ -70,6 +71,12 @@ export default function CommentCard({ comment }: CommentCardProps) {
           comment.Reply.length > 1 ? "ies" : "y"
         }`}</Button>
       )}
+      <ReplyForm
+        comment={comment}
+        open={collapse}
+        setCommentState={setCommentState}
+        setCommentOptimistic={setCommentOptimistic}
+      />
       <br />
     </article>
   );
