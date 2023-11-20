@@ -8,6 +8,7 @@ import { Typography } from "@/components/atom/typography/typograph";
 import { Button } from "@/components/atom/button/material-tailwind";
 import ReplyForm from "../collapse/replyForm";
 import type { NewComments } from "@/components/organ/card/commentCard";
+import ReplyList from "../collapse/replyList";
 
 export interface CommentCardProps {
   comment: Comment & { type?: "error" | "loading" };
@@ -23,6 +24,7 @@ export default function CommentCard({
   const textRef = useRef<HTMLParagraphElement>(null);
   const [limit, setLimit] = useState<number>(0);
   const [collapse, setCollapse] = useState<boolean>(false);
+  const [replyVisible, setReplyVisible] = useState<boolean>(false);
 
   return (
     <article className=" mb-5 mt-5 pb-5 pt-5 border rounded-sm">
@@ -67,7 +69,11 @@ export default function CommentCard({
         </Button>
       )}
       {!!comment.Reply.length && (
-        <Button variant="text" className="rounded-full" color="red">{`See repl${
+        <Button
+          onClick={() => setReplyVisible(!replyVisible)}
+          variant="text"
+          className="rounded-full"
+          color="red">{`See repl${
           comment.Reply.length > 1 ? "ies" : "y"
         }`}</Button>
       )}
@@ -78,6 +84,7 @@ export default function CommentCard({
         setCommentOptimistic={setCommentOptimistic}
       />
       <br />
+      {replyVisible && comment.Reply.map((el) => <ReplyList reply={el} />)}
     </article>
   );
 }
