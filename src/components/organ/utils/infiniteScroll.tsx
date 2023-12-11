@@ -5,14 +5,23 @@ import { Spinner } from "@/components/loader/material-tailwind";
 import PostCard from "@/components/organ/card/postCard";
 import type { PostDataParams, TimeLine } from "@/interfaces/post";
 
+export interface InfinityScrollContext {
+  userId?: string;
+  userIds?: string[];
+}
+
 export interface InfinityScrollProps {
   handler: (params: PostDataParams) => Promise<TimeLine[]>;
   initialState: TimeLine[];
+  context?: InfinityScrollContext;
+  className?: string;
 }
 
 export default function InfinityScroll({
   initialState,
   handler,
+  context,
+  className,
 }: InfinityScrollProps) {
   const [isPending, startTransition] = useTransition();
   const [data, setData] = useState<TimeLine[]>(initialState);
@@ -24,11 +33,10 @@ export default function InfinityScroll({
         if (entities[0].isIntersecting)
           startTransition(async () => {
             if (data.length) {
-              const { searchAfterId, searchAfterTimeStamp } = data[
-                data.length - 1
-              ];
               const posts = await handler({
-                page: `${searchAfterTimeStamp},${searchAfterId}`,
+                ...context,
+                page: Math.floor(data.length / 20 + 1).toString(),
+                limit: "20",
               });
               if (posts.length) setData((prev) => [...prev, ...posts]);
             }
@@ -47,8 +55,11 @@ export default function InfinityScroll({
 
   return (
     <>
-      <article id="scroll-section" className="border border-white">
-        {data.map((el: TimeLine) => (
+      <article
+        id="scroll-section"
+        className={`border border-white ${className}`}
+      >
+        {data.map((el) => (
           <PostCard key={el._id} post={el} />
         ))}
       </article>

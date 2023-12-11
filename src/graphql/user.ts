@@ -97,3 +97,28 @@ export const FOLLOWINGRECOMMENDATION = gql`
     }
   }
 `;
+
+export const GETUSERBYID = gql`
+  query Query($userId: String!) {
+    getUserById(userId: $userId) {
+      background_id
+      background_url
+      bio
+      created_at
+      division
+      email
+      followers
+      following
+      id
+      fullname
+      image_id
+      image_url
+      is_verified
+      token_as
+      status
+      role
+      updated_at
+      username
+    }
+  }
+`;

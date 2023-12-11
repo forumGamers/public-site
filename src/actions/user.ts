@@ -4,6 +4,7 @@ import encryption from "@/utils/encryption";
 import { Mutate, Query } from ".";
 import {
   FOLLOWINGRECOMMENDATION,
+  GETUSERBYID,
   GOOGLELOGIN,
   LOGIN,
   ME,
@@ -156,3 +157,19 @@ export async function followingRecomendation() {
 
   return !data && errors?.length ? [] : data.getFollowingRecomendation;
 }
+
+export const getUserById = async (userId: string) => {
+  const { data, errors } = await Query<{ getUserById: UserData }>({
+    query: GETUSERBYID,
+    context: {
+      headers: {
+        access_token: (await getServerSideSession())?.user?.access_token,
+      },
+    },
+    variables: {
+      userId,
+    },
+  });
+
+  return !data || errors?.length ? null : data.getUserById;
+};

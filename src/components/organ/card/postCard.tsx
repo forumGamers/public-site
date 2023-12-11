@@ -30,12 +30,12 @@ export default function PostCard({ post }: PostCardProps) {
       <PostHeader user={timeline.User} />
       <CardBody className="mt-2 mb-2 p-0">
         <div className="flex flex-col items-start text-white">
-          <PostMedia text={timeline.text} media={timeline.Media} />
+          <PostMedia text={timeline.text} media={timeline.media} />
           <PostInsight
             {...{
-              likes: timeline.CountLike,
-              shares: timeline.CountShare,
-              comments: timeline.CountComment,
+              likes: timeline.countLike,
+              shares: timeline.countShare,
+              comments: timeline.countComment,
             }}
           />
         </div>

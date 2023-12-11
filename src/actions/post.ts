@@ -9,8 +9,14 @@ import type {
 import { Mutate, Query } from ".";
 import {
   COMMENTAPOST,
+  GETMYLIKEDPOST,
+  GETMYMEDIA,
+  GETMYPOST,
   GETPOSTCOMMENT,
   GETTIMELINE,
+  GETUSERLIKEDPOST,
+  GETUSERMEDIA,
+  GETUSERPOST,
   LIKEAPOST,
   REPLYCOMMENT,
   UNLIKEAPOST,
@@ -176,5 +182,140 @@ export const ReplyComment = async (
     };
   } catch (err) {
     return { success: false, data: null, message: "Internal Server Error" };
+  }
+};
+
+export const getMyPost = async (query: PostDataParams) => {
+  try {
+    const access_token = (await getServerSideSession())?.user?.access_token;
+    const { data, errors } = await Query<{ getMyPost: TimeLine[] }>({
+      query: GETMYPOST,
+      variables: {
+        query,
+      },
+      context: {
+        headers: {
+          access_token,
+        },
+      },
+    });
+    return !data && errors?.length ? [] : data.getMyPost;
+  } catch (err) {
+    return [];
+  }
+};
+
+export const getUserPost = async (param: PostDataParams = { userId: "-" }) => {
+  try {
+    const userId = param.userId;
+    delete param.userId;
+
+    const access_token = (await getServerSideSession())?.user?.access_token;
+    const { data, errors } = await Query<{ getUserPost: TimeLine[] }>({
+      query: GETUSERPOST,
+      variables: {
+        param,
+        userId,
+      },
+      context: {
+        headers: {
+          access_token,
+        },
+      },
+    });
+
+    return !data && errors?.length ? [] : data.getUserPost;
+  } catch (err) {
+    return [];
+  }
+};
+
+export const getMyLikedPost = async (query: PostDataParams) => {
+  try {
+    const access_token = (await getServerSideSession())?.user?.access_token;
+    const { data, errors } = await Query<{ getMyLikedPost: TimeLine[] }>({
+      query: GETMYLIKEDPOST,
+      variables: {
+        query,
+      },
+      context: {
+        headers: {
+          access_token,
+        },
+      },
+    });
+    return !data && errors?.length ? [] : data.getMyLikedPost;
+  } catch (err) {
+    return [];
+  }
+};
+
+export const getUserLikedPost = async (
+  param: PostDataParams = { userId: "-" }
+) => {
+  try {
+    const userId = param.userId;
+    delete param.userId;
+
+    const access_token = (await getServerSideSession())?.user?.access_token;
+    const { data, errors } = await Query<{ getUserLikedPost: TimeLine[] }>({
+      query: GETUSERLIKEDPOST,
+      variables: {
+        param,
+        userId,
+      },
+      context: {
+        headers: {
+          access_token,
+        },
+      },
+    });
+    return !data && errors?.length ? [] : data.getUserLikedPost;
+  } catch (err) {
+    return [];
+  }
+};
+
+export const getMyMedia = async (query: PostDataParams) => {
+  try {
+    const access_token = (await getServerSideSession())?.user?.access_token;
+    const { data, errors } = await Query<{ getMedia: TimeLine[] }>({
+      query: GETMYMEDIA,
+      variables: {
+        query,
+      },
+      context: {
+        headers: {
+          access_token,
+        },
+      },
+    });
+    return !data && errors?.length ? [] : data.getMedia;
+  } catch (err) {
+    return [];
+  }
+};
+
+export const getUserMedia = async (param: PostDataParams = { userId: "-" }) => {
+  try {
+    const userId = param.userId;
+    delete param.userId;
+
+    const access_token = (await getServerSideSession())?.user?.access_token;
+    const { data, errors } = await Query<{ getUserMedia: TimeLine[] }>({
+      query: GETUSERMEDIA,
+      variables: {
+        param,
+        userId,
+      },
+      context: {
+        headers: {
+          access_token,
+        },
+      },
+    });
+    return !data && errors?.length ? [] : data.getUserMedia;
+  } catch (err) {
+    return [];
   }
 };

@@ -3,6 +3,7 @@ import type { UserData } from "./user";
 export interface PostDataParams {
   page?: string;
   limit?: string;
+  userId?: string;
 }
 
 export interface TimeLine {
@@ -12,15 +13,13 @@ export interface TimeLine {
   imageUrl: string;
   imageId: string;
   allowComment: boolean;
-  CreatedAt: string;
-  UpdatedAt: string;
-  CountLike: number;
-  CountComment: number;
-  CountShare: number;
-  searchAfterTimeStamp: number;
-  searchAfterId: string;
+  createdAt: string;
+  updatedAt: string;
+  countLike: number;
+  countComment: number;
+  countShare: number;
   User: UserTimeLine;
-  Media: PostMedia;
+  media: PostMedia;
   isLiked: boolean;
   isShared: boolean;
   tags: string[];
