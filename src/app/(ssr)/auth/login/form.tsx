@@ -9,6 +9,8 @@ import { experimental_useFormStatus as useFormStatus } from "react-dom";
 import LoadingOverlay from "@/components/loader/overlay";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
+import EmailForm from "@/components/mollecul/form/emailForm";
+import PasswordForm from "@/components/mollecul/form/passwordForm";
 
 export type state = {
   email: string;
@@ -67,19 +69,15 @@ export default function LoginForm() {
     <>
       <LoadingOverlay spinner text="...loading" active={pending}>
         <div className="w-full m-auto">
-          <label htmlFor="email" className="label">
-            <span className="text-sm font-semibold text-blue-700">Email</span>
-          </label>
-          <input
-            className="rounded-xl w-full bg-white text-blue-700 h-14 text-start p-2 focus:border focus:border-blue-500"
-            type="text"
+          <EmailForm
             name="email"
             value={data.email}
-            onChange={handleChange}
+            onChangeHandler={handleChange}
             required
+            id="email"
             placeholder="Please fill your email"
           />
-          <label htmlFor="email" className="label">
+          <label htmlFor="password" className="label">
             <span className="text-sm font-semibold text-blue-700">
               Password
             </span>
@@ -103,6 +101,15 @@ export default function LoginForm() {
               See Password
             </span>
           </label>
+          <PasswordForm
+            setVisible={() => setVisiblePass(!visiblePass)}
+            visiblePass={visiblePass}
+            value={data.password}
+            onChangeHandler={handleChange}
+            required
+            id="password"
+            name="password"
+          />
           {mount && (
             <ReCAPTCHA
               sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY as string}
