@@ -43,7 +43,7 @@ export default function PostFooter({
       >
         <HeartIcon
           className={`h-6 w-6 text-[#EE2924]
-             ${liked ? "text-[#EE2924]" : "text-transparent stroke-[#EE2924]"}
+              ${liked ? "text-[#EE2924]" : "text-transparent stroke-[#EE2924]"}
             `}
         />
         <span style={{ textTransform: "none" }}>Like</span>
@@ -52,6 +52,7 @@ export default function PostFooter({
       <Link
         className="btn btn-ghost gap-1 text-white/50 cursor-pointer"
         href={`/comment/${_id}`}
+        prefetch
       >
         <ChatBubbleLeftIcon className="h-6 w-6 text-[#EE2924]" />
         <span style={{ textTransform: "none" }}>Comment</span>
@@ -65,6 +66,7 @@ export default function PostFooter({
       <Link
         className="btn btn-ghost gap-1 text-white/50"
         href={`/shares/${_id}`}
+        prefetch
       >
         <ShareIcon className="h-6 w-6 text-[#EE2924]" />
         <span style={{ textTransform: "none" }}>Share</span>

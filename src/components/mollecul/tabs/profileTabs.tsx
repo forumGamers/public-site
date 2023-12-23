@@ -51,7 +51,7 @@ export default function ProfileTabs({ tabs }: ProfileTabsProps) {
             value={name}
             className={`border-b border-gray-500 border-solid cursor-pointer font-semibold h-[35px] leading-[normal] text-center text-xs w-[235px] hover:bg-blue-gray-300 hover:transition-colors hover:duration-1000 hover:ease-in-out ${
               name === active.name
-                ? " bg-blue-500 rounded-sm transition-colors duration-500 ease-in-out"
+                ? " bg-blue-500 rounded-sm transition-colors duration-500 ease-in-out text-white"
                 : ""
             } rounded-md items-center`}
             onClick={() => activedTransition(name)}>

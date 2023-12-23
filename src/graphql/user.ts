@@ -122,3 +122,11 @@ export const GETUSERBYID = gql`
     }
   }
 `;
+
+export const UPDATEPROFILE = gql`
+  mutation Mutation($data: updateProfile!) {
+    updateProfile(data: $data) {
+      message
+    }
+  }
+`;

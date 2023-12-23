@@ -41,6 +41,7 @@ export default function Form() {
           onChange={onChange}
           placeholder="name@mail.com"
           value={data.fullname}
+          name="fullname"
           className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
           labelProps={{
             className: "before:content-none after:content-none",
@@ -52,8 +53,9 @@ export default function Form() {
         <Input
           size="lg"
           onChange={onChange}
-          placeholder="name@mail.com"
+          placeholder="name123"
           value={data.username}
+          name="username"
           className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
           labelProps={{
             className: "before:content-none after:content-none",
@@ -65,6 +67,7 @@ export default function Form() {
         <Input
           size="lg"
           onChange={onChange}
+          name="email"
           value={data.email}
           placeholder="name@mail.com"
           className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -79,6 +82,7 @@ export default function Form() {
           value={data.password}
           type="password"
           size="lg"
+          name="password"
           onChange={onChange}
           placeholder="********"
           className=" !border-t-blue-gray-200 focus:!border-t-gray-900"

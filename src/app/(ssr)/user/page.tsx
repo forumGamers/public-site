@@ -9,6 +9,7 @@ export default async function Page() {
 
   return (
     <UserPage
+      edit
       user={user}
       tabs={[
         {

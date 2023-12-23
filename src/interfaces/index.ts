@@ -27,3 +27,8 @@ export interface MessageResponse {
 export interface PageParams<T = { id: string }> {
   params: T;
 }
+
+export type ImageInput = {
+  file: File;
+  fileReader: string | ArrayBuffer | null;
+} | null;

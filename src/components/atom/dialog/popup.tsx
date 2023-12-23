@@ -7,9 +7,15 @@ export interface BasePopup {
   children: React.ReactNode;
   handler: Dispatch<SetStateAction<any>>;
   open: boolean;
+  className?: string;
 }
 
-export default function PopUp({ children, handler, open }: BasePopup) {
+export default function PopUp({
+  children,
+  handler,
+  open,
+  className,
+}: BasePopup) {
   return (
     <Dialog
       open={open}
@@ -19,6 +25,7 @@ export default function PopUp({ children, handler, open }: BasePopup) {
         unmount: { scale: 0.9, y: -100 },
       }}
       size="lg"
+      className={className}
     >
       {children}
     </Dialog>

@@ -9,6 +9,7 @@ import {
   LOGIN,
   ME,
   REGISTER,
+  UPDATEPROFILE,
   USERRESETPASSWORD,
 } from "@/graphql/user";
 import { redirect } from "next/navigation";
@@ -172,4 +173,38 @@ export const getUserById = async (userId: string) => {
   });
 
   return !data || errors?.length ? null : data.getUserById;
+};
+
+export const updateProfile = async (formData: FormData) => {
+  try {
+    const username = formData.get("username");
+    const bio = formData.get("bio");
+    let background = formData.get("backgroundImg");
+    if (background) background = background;
+    let img = formData.get("profileImg");
+    if (img) img = img;
+
+    const { errors } = await Mutate({
+      mutation: UPDATEPROFILE,
+      context: {
+        headers: {
+          access_token: (await getServerSideSession())?.user?.access_token,
+        },
+      },
+      variables: {
+        data: {
+          img,
+          background,
+          username,
+          bio,
+        },
+      },
+    });
+
+    if (errors && errors.length) redirect(`/user?error=${errors[0].message}`);
+
+    redirect("/user");
+  } catch (err) {
+    redirect(`/user?error=${err}`);
+  }
 };

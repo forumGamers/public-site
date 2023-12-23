@@ -55,8 +55,8 @@ export default function ProfileCard({
       </CardBody>
       <CardFooter className="flex flex-col items-center">
         <Button className="btn btn-ghost bg-[#D9D9D9] gap-1 text-[#16181C] border border-white/50 rounded-full w-[8rem] px-4 py-2">
-          <span style={{ textTransform: "none" }}>Edit Profile</span>
-          <Link href={`/user/${id}`} />
+          <span style={{ textTransform: "none" }}>See Profile</span>
+          <Link href={`/user/${id}`} prefetch />
         </Button>
       </CardFooter>
     </Card>
