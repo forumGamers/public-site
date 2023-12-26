@@ -4,9 +4,9 @@ import "./style.css";
 
 export default function Page() {
   return (
-    <main id="main-about">
+    <main id="main-about" className="bg-[#202123]">
       <Hero />
-      <section className="bg-[#f2f2f2] rounded-b-xl mt-12">
+      <section className="mt-20">
         <Service />
       </section>
     </main>

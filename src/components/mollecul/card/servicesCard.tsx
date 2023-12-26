@@ -5,10 +5,12 @@ import "@/components/styles/servicesCard.module.css";
 
 export default function ServiceCard({
   title,
+  photo,
   desc,
   backContent,
 }: {
   title: string;
+  photo: string;
   desc: string;
   backContent: string;
 }) {
@@ -45,8 +47,9 @@ export default function ServiceCard({
         </span>
         {!flip ? (
           <>
-            <h6 className="text-blue-gray-800 bold">{title}</h6>
-            <p className="text-blue-gray-800">{desc}</p>
+            <h6 className="text-blue-gray-800 font-bold text-center">{title}</h6>
+            <div className="photo align-center" style={{ width: '250px', height: '200px' }}>{photo}</div>
+            <p className="text-blue-gray-800 text-center">{desc}</p>
           </>
         ) : (
           <p className="text-blue-gray-800">{backContent}</p>
